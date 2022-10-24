@@ -48,10 +48,10 @@ const createNewUser = asyncHandler(
 const updateUser = asyncHandler(
     async (req, res) => {
 
-        const { id,username, roles, active, password } = req.body
+        const { id, username, roles, active, password } = req.body
 
         //confirm data
-        if (!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== Boolean) {
+        if (!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
             return res.status(400).json({ message: 'All fields are required' })
         }
 
@@ -93,12 +93,12 @@ const deleteUser = asyncHandler(
             return res.status(400).json({ message: 'user ID required'})
         }
 
-        const notes = await Note.findOne({ user: id }).lean().exec()
-        if (notes?.length) {
+        const note = await Note.findOne({ user: id }).lean().exec()
+        if (note?.length) {
             return res.status(400).json({ message: 'user has assigned notes' })
         }
 
-        const user = await findById(id).exec()
+        const user = await User.findById(id).exec()
         if (!user) {
             return res.status(400).json({ message: 'user not found'})
         }
